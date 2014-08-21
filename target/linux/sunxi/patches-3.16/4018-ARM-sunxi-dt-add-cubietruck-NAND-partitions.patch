@@ -12,7 +12,7 @@ diff --git a/arch/arm/boot/dts/sun7i-a20-cubietruck.dts b/arch/arm/boot/dts/sun7
 index 204ca7d..c0261f6 100644
 --- a/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
 +++ b/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
-@@ -31,6 +31,70 @@
+@@ -31,6 +31,71 @@
  				reg = <0>;
  				allwinner,rb = <0>;
  				nand-ecc-mode = "hw";
@@ -22,15 +22,16 @@ index 204ca7d..c0261f6 100644
 +					label = "spl";
 +					reg = /bits/ 64 <0x0 0x200000>;
 +					nand-ecc-mode = "hw_syndrome";
++					nand-rnd-mode = "hw";
 +					nand-randomizer-seeds = /bits/ 16 <0x4a80>;
 +				};
 +
 +				uboot@200000 {
-+					label = "boot0-rescue";
++					label = "uboot";
 +					reg = /bits/ 64 <0x200000 0x200000>;
 +					nand-ecc-mode = "hw_syndrome";
 +					nand-rnd-mode = "hw";
-+					nand-randomizer-seeds = /bits/ 16 <0x4a80>;
++					nand-randomizer-seeds = /bits/ 16 <0x00>;
 +				};
 +
 +                               env@0x400000 {
@@ -38,7 +39,7 @@ index 204ca7d..c0261f6 100644
 +                                       reg = /bits/ 64 <0x400000 0x200000>;
 +                                       nand-ecc-mode = "hw_syndrome";
 +                                       nand-rnd-mode = "none";
-+                                       nand-randomizer-seeds = /bits/ 16 <0x4a80>;
++                                       nand-randomizer-seeds = /bits/ 16 <0x00>;
 +                               };
 +
 +                               dtb@600000 {
@@ -46,20 +47,20 @@ index 204ca7d..c0261f6 100644
 +                                       reg = /bits/ 64 <0x600000 0x200000>;
 +                                       nand-ecc-mode = "hw";
 +                                       nand-rnd-mode = "none";
-+                                       nand-randomizer-seeds = /bits/ 16 <0x4a80>;
++                                       nand-randomizer-seeds = /bits/ 16 <0x00>;
 +                               };
 +
 +                               kernel@800000 {
-+                                       label = "dtb";
++                                       label = "kernel";
 +                                       reg = /bits/ 64 <0x800000 0x800000>;
 +                                       nand-ecc-mode = "hw";
 +                                       nand-rnd-mode = "none";
-+                                       nand-randomizer-seeds = /bits/ 16 <0x4a80>;
++                                       nand-randomizer-seeds = /bits/ 16 <0x00>;
 +                               };
 +
 +                               rootfs@200000 {
 +                                       label = "rootfs";
-+                                       reg = /bits/ 64 <0x1000000 0x1000000>;
++                                       reg = /bits/ 64 <0x1000000 0x1ff000000>;
 +                                       nand-ecc-mode = "hw";
 +                                       nand-rnd-mode = "hw";
 +                                       nand-randomizer-seeds = /bits/ 16 <
