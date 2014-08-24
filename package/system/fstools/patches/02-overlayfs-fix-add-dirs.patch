@@ -1,0 +1,25 @@
+diff -Naur fstools-2014-06-22.orig/.dep_files fstools-2014-06-22/.dep_files
+--- fstools-2014-06-22.orig/.dep_files	1970-01-01 01:00:00.000000000 +0100
++++ fstools-2014-06-22/.dep_files	2014-08-24 14:58:39.850748044 +0200
+@@ -0,0 +1 @@
++0fafc99310887075f43b6d56963970cb
+diff -Naur fstools-2014-06-22.orig/libfstools/overlay.c fstools-2014-06-22/libfstools/overlay.c
+--- fstools-2014-06-22.orig/libfstools/overlay.c	2014-08-17 16:20:41.000000000 +0200
++++ fstools-2014-06-22/libfstools/overlay.c	2014-08-24 17:42:01.577960423 +0200
+@@ -231,6 +231,16 @@
+ 		return -1;
+ 	}
+ 
++	if(mkdir("/tmp/overlay/upper", 0755)!= 0 && errno != EEXIST) {
++		fprintf(stderr, "failed to mkdir /tmp/overlay/upper: %s\n", strerror(errno));
++		return -1;	
++	}
++
++	if(mkdir("/tmp/overlay/work", 755)!= 0 && errno != EEXIST) {
++		fprintf(stderr, "failed to mkdir /tmp/overlay/work: %s\n", strerror(errno));
++		return -1;	
++	}
++
+ 	volume_init(v);
+ 
+ 	return -1;

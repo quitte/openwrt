@@ -1,0 +1,12 @@
+diff -Naur fstools-2014-06-22.orig/libfstools/mount.c fstools-2014-06-22/libfstools/mount.c
+--- fstools-2014-06-22.orig/libfstools/mount.c	2014-08-17 16:20:41.000000000 +0200
++++ fstools-2014-06-22/libfstools/mount.c	2014-08-24 13:28:37.892410978 +0200
+@@ -90,7 +90,7 @@
+ 	}
+ 
+ 	snprintf(overlay, sizeof(overlay), "overlayfs:%s", rw_root);
+-	snprintf(lowerdir, sizeof(lowerdir), "lowerdir=/,upperdir=%s", rw_root);
++	snprintf(lowerdir, sizeof(lowerdir), "lowerdir=/,upperdir=%s/upper,workdir=%s/work", rw_root, rw_root);
+ 
+ 	if (mount(overlay, "/mnt", "overlayfs", MS_NOATIME, lowerdir)) {
+ 		fprintf(stderr, "mount failed: %s\n", strerror(errno));
