@@ -1,0 +1,13 @@
+diff --git a/drivers/mtd/nand/nand_base.c b/drivers/mtd/nand/nand_base.c
+index 2b8e8db..af2477d 100644
+--- a/drivers/mtd/nand/nand_base.c
++++ b/drivers/mtd/nand/nand_base.c
+@@ -4752,7 +4752,7 @@ int nand_add_partition(struct mtd_info *master, struct nand_part *part)
+ 	 * properly set.
+ 	 */
+ 	if (!mtd->bitflip_threshold)
+-		mtd->bitflip_threshold = mtd->ecc_strength;
++		mtd->bitflip_threshold = mtd->ecc_strength + 1;
+ 
+ 	part->master = master;
+
