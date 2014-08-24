@@ -58,8 +58,8 @@ index 204ca7d..c0261f6 100644
 +                                       nand-randomizer-seeds = /bits/ 16 <0x00>;
 +                               };
 +
-+                               rootfs@200000 {
-+                                       label = "rootfs";
++                               ubi@1000000 {
++                                       label = "ubi";
 +                                       reg = /bits/ 64 <0x1000000 0x1ff000000>;
 +                                       nand-ecc-mode = "hw";
 +                                       nand-rnd-mode = "hw";
