@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 ARCH:=arm
 BOARD:=sunxi
 BOARDNAME:=Allwinner A1x/A20/A3x
-FEATURES:=fpu usb ext4 display rtc
+FEATURES:=fpu usb display rtc squashfs nand
 CPU_TYPE:=cortex-a8
 CPU_SUBTYPE:=vfpv3
 MAINTAINER:=Zoltan HERPAI <wigyori@uid0.hu>
@@ -27,3 +27,5 @@ DEFAULT_PACKAGES += uboot-envtools uboot-sunxi kmod-eeprom-sunxi kmod-wdt-sunxi
 include $(INCLUDE_DIR)/target.mk
 
 $(eval $(call BuildTarget))
+
+Image/Build/Profile/Cubietruck=$(call Image/Build/Cubietruck,$(1),ARV452CQW)

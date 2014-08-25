@@ -6,6 +6,9 @@
 #
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
+# $(4) options to pass-through to ubinize (i.e. $($(PROFILE)_UBI_OPTS)))
+Cubietruck_UBI_OPTS="-p 2MiB -m 8KiB"
+
 
 BOARDS:= \
 	sun4i-a10-cubieboard \
@@ -41,6 +44,7 @@ endef
 define Image/Build
 	$(call Image/Build/$(1),$(1))
 	dd if=$(KDIR)/root.$(1) of=$(BIN_DIR)/openwrt-$(BOARD)-root.$(1) bs=128k conv=sync
+	$(call Image/Build/UbinizeImage,$(PROFILE),,squashfs,$($(PROFILE)_UBI_OPTS))
 endef
 
 $(eval $(call BuildImage))
