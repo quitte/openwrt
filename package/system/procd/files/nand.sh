@@ -91,8 +91,10 @@ nand_restore_config() {
 		echo "mounting ubifs $ubivol failed"
 		rmdir /tmp/new_root
 		return 1
+	else
+		mkdir /tmp/new_root/upper		
 	fi
-	mv "$1" "/tmp/new_root/sysupgrade.tgz"
+	mv "$1" "/tmp/new_root/upper/sysupgrade.tgz"
 	umount /tmp/new_root
 	sync
 	rmdir /tmp/new_root
