@@ -28,4 +28,4 @@ include $(INCLUDE_DIR)/target.mk
 
 $(eval $(call BuildTarget))
 
-Image/Build/Profile/Cubietruck=$(call Image/Build/Cubietruck,$(1),ARV452CQW)
+Image/Build/Profile/Cubietruck=$(call Image/Build/Cubietruck,$(1))
