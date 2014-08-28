@@ -9,15 +9,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uboot-envtools
 PKG_DISTNAME:=u-boot
-PKG_VERSION:=2014.07
+PKG_REV:= e76b933e02e1b38e48754c435e9dba1c0deeb3c6
+PKG_VERSION:=2014.10-rc1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_DISTNAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:= \
-	http://mirror2.openwrt.org/sources \
-	ftp://ftp.denx.de/pub/u-boot
+PKG_SOURCE_URL:= git://git.denx.de/u-boot.git
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
 
-PKG_MD5SUM:=36d4bad687edcafa396fee607e505d4e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/u-boot-$(PKG_VERSION)
 

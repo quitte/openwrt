@@ -1,0 +1,49 @@
+From ca5f6f4c3290723aca22c48793421cbdce0fb166 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Thu, 28 Aug 2014 19:07:43 +0200
+Subject: [PATCH 7/7] make env tools work with mlc nand
+
+---
+ include/mtd/mtd-abi.h | 1 +
+ tools/env/fw_env.c    | 6 +++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/include/mtd/mtd-abi.h b/include/mtd/mtd-abi.h
+index ac3c298..1a2bb90 100644
+--- a/include/mtd/mtd-abi.h
++++ b/include/mtd/mtd-abi.h
+@@ -50,6 +50,7 @@ enum {
+ #define MTD_NANDFLASH		4
+ #define MTD_DATAFLASH		6
+ #define MTD_UBIVOLUME		7
++#define MTD_MLCNANDFLASH	8
+ 
+ #define MTD_WRITEABLE		0x400	/* Device is writeable */
+ #define MTD_BIT_WRITEABLE	0x800	/* Single bits can be flipped */
+diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
+index 30d5b03..3218d3f 100644
+--- a/tools/env/fw_env.c
++++ b/tools/env/fw_env.c
+@@ -1074,7 +1074,8 @@ static int flash_read (int fd)
+ 		if (mtdinfo.type != MTD_NORFLASH &&
+ 		    mtdinfo.type != MTD_NANDFLASH &&
+ 		    mtdinfo.type != MTD_DATAFLASH &&
+-		    mtdinfo.type != MTD_UBIVOLUME) {
++		    mtdinfo.type != MTD_UBIVOLUME &&
++		    mtdinfo.type != MTD_MLCNANDFLASH) {
+ 			fprintf (stderr, "Unsupported flash type %u on %s\n",
+ 				 mtdinfo.type, DEVNAME(dev_current));
+ 			return -1;
+@@ -1262,6 +1263,9 @@ int fw_env_open(void)
+ 		} else if (DEVTYPE(dev_current) == MTD_NANDFLASH &&
+ 			   DEVTYPE(!dev_current) == MTD_NANDFLASH) {
+ 			environment.flag_scheme = FLAG_INCREMENTAL;
++		} else if (DEVTYPE(dev_current) == MTD_MLCNANDFLASH &&
++			   DEVTYPE(!dev_current) == MTD_MLCNANDFLASH) {
++			environment.flag_scheme = FLAG_INCREMENTAL;
+ 		} else if (DEVTYPE(dev_current) == MTD_DATAFLASH &&
+ 			   DEVTYPE(!dev_current) == MTD_DATAFLASH) {
+ 			environment.flag_scheme = FLAG_BOOLEAN;
+-- 
+1.9.0
+
