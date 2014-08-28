@@ -29,15 +29,15 @@ index 204ca7d..c0261f6 100644
 +				uboot@200000 {
 +					label = "uboot";
 +					reg = /bits/ 64 <0x200000 0x200000>;
-+					nand-ecc-mode = "hw_syndrome";
-+					nand-rnd-mode = "hw";
++					nand-ecc-mode = "hw";
++					nand-rnd-mode = "none";
 +					nand-randomizer-seeds = /bits/ 16 <0x00>;
 +				};
 +
 +                               env@0x400000 {
 +                                       label = "env";
 +                                       reg = /bits/ 64 <0x400000 0x200000>;
-+                                       nand-ecc-mode = "hw_syndrome";
++                                       nand-ecc-mode = "hw";
 +                                       nand-rnd-mode = "none";
 +                                       nand-randomizer-seeds = /bits/ 16 <0x00>;
 +                               };
