@@ -1,0 +1,168 @@
+From 873eb8875bfeb066a5fffd1edd1d1f1263d23c88 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Wed, 20 Aug 2014 00:23:58 +0200
+Subject: [PATCH 5/5] as-is changes that make it work on cubietruck okay except
+ for the missing default environment and all the ecc errors you will get due
+ to missing read-retry support
+
+---
+ arch/arm/cpu/armv7/sunxi/board.c |  2 ++
+ common/cmd_nand.c                |  1 -
+ configs/Cubietruck_defconfig     |  2 +-
+ drivers/mtd/nand/sunxi_nand.c    |  2 +-
+ include/configs/sunxi-common.h   | 54 ++++++++++++++++++++++++++++++++--------
+ 5 files changed, 48 insertions(+), 13 deletions(-)
+
+diff --git a/arch/arm/cpu/armv7/sunxi/board.c b/arch/arm/cpu/armv7/sunxi/board.c
+index 8f2cef3..ed2d35b 100644
+--- a/arch/arm/cpu/armv7/sunxi/board.c
++++ b/arch/arm/cpu/armv7/sunxi/board.c
+@@ -38,6 +38,8 @@ DECLARE_GLOBAL_DATA_PTR;
+  */
+ u32 spl_boot_device(void)
+ {
++	/*TODO:figure out a way to handle the various SPL versions*/
++	return BOOT_DEVICE_NAND;
+ 	return BOOT_DEVICE_MMC1;
+ }
+ 
+diff --git a/common/cmd_nand.c b/common/cmd_nand.c
+index 702701a..14a7b93 100644
+--- a/common/cmd_nand.c
++++ b/common/cmd_nand.c
+@@ -28,7 +28,6 @@
+ #include <asm/byteorder.h>
+ #include <jffs2/jffs2.h>
+ #include <nand.h>
+-#include <packimg.h>
+ 
+ #if defined(CONFIG_CMD_MTDPARTS)
+ 
+diff --git a/configs/Cubietruck_defconfig b/configs/Cubietruck_defconfig
+index 4c1e9a3..e498f70 100644
+--- a/configs/Cubietruck_defconfig
++++ b/configs/Cubietruck_defconfig
+@@ -1,4 +1,4 @@
+ CONFIG_SPL=y
+-CONFIG_SYS_EXTRA_OPTIONS="CUBIETRUCK,SPL,AXP209_POWER,SUNXI_GMAC,RGMII"
++CONFIG_SYS_EXTRA_OPTIONS="CUBIETRUCK,SPL,AXP209_POWER,SUNXI_GMAC,RGMII,NAND"
+ +S:CONFIG_ARM=y
+ +S:CONFIG_TARGET_SUN7I=y
+diff --git a/drivers/mtd/nand/sunxi_nand.c b/drivers/mtd/nand/sunxi_nand.c
+index b37188c..f8fc412 100644
+--- a/drivers/mtd/nand/sunxi_nand.c
++++ b/drivers/mtd/nand/sunxi_nand.c
+@@ -576,7 +576,7 @@ int board_nand_init(struct nand_chip *nand)
+ 	nand->ecc.layout = &sunxi_ecclayout;
+ 	nand->ecc.size = (1U << chip_param->page_shift);
+ 	nand->ecc.bytes = 0;
+-	nand->ecc.strngth = 40; /*TODO: move in proper place and put proper value*/
++	nand->ecc.strength = 40; /*TODO: move in proper place and put proper value*/
+ 
+ 	// set buffer size
+ 	buffer_size = (1U << chip_param->page_shift) + 1024;
+diff --git a/include/configs/sunxi-common.h b/include/configs/sunxi-common.h
+index 9edeec6..11e192b 100644
+--- a/include/configs/sunxi-common.h
++++ b/include/configs/sunxi-common.h
+@@ -20,6 +20,7 @@
+ #ifdef CONFIG_SPL_BUILD
+ #ifndef CONFIG_SPL_FEL
+ #define CONFIG_SYS_THUMB_BUILD	/* Thumbs mode to save space in SPL */
++#define CONFIG_SPL_NAND_BOOT
+ #endif
+ #endif
+ 
+@@ -27,6 +28,33 @@
+ 
+ #define CONFIG_SYS_TEXT_BASE		0x4a000000
+ 
++/*asdfljsadf*/
++#define CONFIG_SPL_NAND_BOOT
++#define CONFIG_SYS_NAND_U_BOOT_OFFS     0x200000
++#define CONFIG_SYS_NAND_U_BOOT_DST	0x44000000
++#define CONFIG_SYS_NAND_U_BOOT_SIZE	0x100000
++#define CONFIG_SYS_NAND_U_BOOT_START	0x00
++
++/*SPL configuration
++
++                CONFIG_SPL_NAND_BOOT
++                Add support NAND boot
++
++                CONFIG_SYS_NAND_U_BOOT_OFFS
++                Location in NAND to read U-Boot from
++
++                CONFIG_SYS_NAND_U_BOOT_DST
++                Location in memory to load U-Boot to
++
++                CONFIG_SYS_NAND_U_BOOT_SIZE
++                Size of image to load
++
++                CONFIG_SYS_NAND_U_BOOT_START
++                Entry point in loaded image to jump to
++
++*/
++
++
+ /*
+  * Display CPU information
+  */
+@@ -84,29 +112,38 @@
+ #define CONFIG_CMD_UBIFS
+ #define CONFIG_CMD_NAND_1K
+ 
+-#define CONFIG_ENV_IS_IN_NAND
+-
+-#define CONFIG_ENV_OFFSET	0x500000	/* at 5MB */
+-#define CONFIG_ENV_RANGE        0x300000
+-
+ #define CONFIG_SPL_NAND_SUPPORT
+ #define CONFIG_SPL_NAND_ECC
+ #define CONFIG_SPL_NAND_BASE
+ #define CONFIG_SPL_NAND_DRIVERS
+ #define CONFIG_SPL_DMA_SUPPORT
+-#define CONFIG_SYS_NAND_U_BOOT_OFFS     0x200000
+ 
+ #define CONFIG_SYS_NAND_PAGE_SIZE sunxi_nand_spl_page_size
+ #define CONFIG_SYS_NAND_BLOCK_SIZE sunxi_nand_spl_block_size
++
++
++#define CONFIG_ENV_IS_IN_NAND
++#define CONFIG_ENV_OFFSET	0x400000	/* at 4MB */
++#define CONFIG_ENV_SIZE		(128<<10)
++/*#define CONFIG_ENV_RANGE        0x300000*/
++#else
++#define CONFIG_ENV_IS_IN_MMC
++#define CONFIG_ENV_OFFSET		(544 << 10) /* (8 + 24 + 512) KiB */
++#define CONFIG_ENV_SIZE			(128 << 10)	/* 128 KiB */
++#define CONFIG_SPL_LIBDISK_SUPPORT
++#define CONFIG_SPL_MMC_SUPPORT
++
++#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR        80      /* 40KiB */
++#define CONFIG_SPL_PAD_TO              32768           /* decimal for 'dd' */
+ #endif
+ 
++
+ /* mmc config */
+ #define CONFIG_MMC
+ #define CONFIG_GENERIC_MMC
+ #define CONFIG_CMD_MMC
+ #define CONFIG_MMC_SUNXI
+ #define CONFIG_MMC_SUNXI_SLOT		0
+-#define CONFIG_ENV_IS_IN_MMC
+ #define CONFIG_SYS_MMC_ENV_DEV		0	/* first detected MMC controller */
+ 
+ /* 16MB of malloc() pool */
+@@ -144,9 +181,6 @@
+ #define CONFIG_SYS_MONITOR_LEN		(512 << 10)	/* 512 KiB */
+ #define CONFIG_IDENT_STRING		" Allwinner Technology"
+ 
+-#define CONFIG_ENV_OFFSET		(544 << 10) /* (8 + 24 + 512) KiB */
+-#define CONFIG_ENV_SIZE			(128 << 10)	/* 128 KiB */
+-
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+ 	"bootm_size=0x10000000\0"
+ 
+-- 
+1.9.0
+

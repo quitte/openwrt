@@ -1,0 +1,37 @@
+From 672e53565b48957d4f0ddcfe9c85f25ab1f5a660 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@quitte-PC.lan>
+Date: Thu, 14 Aug 2014 22:20:56 +0200
+Subject: [PATCH 2/5] temporarily added sr32() function that was already
+ removed upstream here
+
+---
+ arch/arm/cpu/armv7/sunxi/clock_sun4i.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/arm/cpu/armv7/sunxi/clock_sun4i.c b/arch/arm/cpu/armv7/sunxi/clock_sun4i.c
+index b81e368..7f33778 100644
+--- a/arch/arm/cpu/armv7/sunxi/clock_sun4i.c
++++ b/arch/arm/cpu/armv7/sunxi/clock_sun4i.c
+@@ -59,6 +59,19 @@ void clock_init_uart(void)
+ }
+ 
+ #ifdef CONFIG_NAND_SUNXI
++/* temporarily put the sr32 function here, since it was removed upstream
++TODO: move away from sr32
++*/
++void sr32(void *addr, u32 start_bit, u32 num_bits, u32 value)
++{
++        u32 tmp, msk = 0;
++        msk = 1 << num_bits;
++        --msk;
++        tmp = readl((u32)addr) & ~(msk << start_bit);
++        tmp |= value << start_bit;
++        writel(tmp, (u32)addr);
++}
++
+ void clock_init_nand()
+ {
+ 	struct sunxi_ccm_reg *const ccm =
+-- 
+1.9.0
+

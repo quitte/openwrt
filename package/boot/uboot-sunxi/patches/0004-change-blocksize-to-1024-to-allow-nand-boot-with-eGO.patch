@@ -1,0 +1,36 @@
+From 19b85e7499dca5c7434a216c023ccc226be8ccaa Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@quitte-PC.lan>
+Date: Fri, 15 Aug 2014 00:00:18 +0200
+Subject: [PATCH 4/5] change blocksize to 1024 to allow nand boot with eGON set
+ padding to 0xff
+
+---
+ tools/mksunxiboot.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tools/mksunxiboot.c b/tools/mksunxiboot.c
+index 1f0fbae..a4f80e4 100644
+--- a/tools/mksunxiboot.c
++++ b/tools/mksunxiboot.c
+@@ -65,7 +65,7 @@ int gen_check_sum(struct boot_file_head *head_p)
+ 
+ #define SUN4I_SRAM_SIZE 0x7600	/* 0x7748+ is used by BROM */
+ #define SRAM_LOAD_MAX_SIZE (SUN4I_SRAM_SIZE - sizeof(struct boot_file_head))
+-#define BLOCK_SIZE 512
++#define BLOCK_SIZE 1024	/*quitte: was 512*/
+ 
+ struct boot_img {
+ 	struct boot_file_head header;
+@@ -109,6 +109,9 @@ int main(int argc, char *argv[])
+ 		return EXIT_FAILURE;
+ 	}
+ 
++	/*initialize img.code*/
++	memset(img.code,0xff,SRAM_LOAD_MAX_SIZE);
++
+ 	/* read file to buffer to calculate checksum */
+ 	lseek(fd_in, 0, SEEK_SET);
+ 	count = read(fd_in, img.code, file_size);
+-- 
+1.9.0
+

@@ -1,0 +1,24 @@
+From ed4afcc15c0c8dbb3a5b134b4793ce6760be73b0 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Thu, 14 Aug 2014 23:31:11 +0200
+Subject: [PATCH 3/5] claim ecc strength was 40 to make u-boot actually run
+
+---
+ drivers/mtd/nand/sunxi_nand.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mtd/nand/sunxi_nand.c b/drivers/mtd/nand/sunxi_nand.c
+index 336bfaa..b37188c 100644
+--- a/drivers/mtd/nand/sunxi_nand.c
++++ b/drivers/mtd/nand/sunxi_nand.c
+@@ -576,6 +576,7 @@ int board_nand_init(struct nand_chip *nand)
+ 	nand->ecc.layout = &sunxi_ecclayout;
+ 	nand->ecc.size = (1U << chip_param->page_shift);
+ 	nand->ecc.bytes = 0;
++	nand->ecc.strngth = 40; /*TODO: move in proper place and put proper value*/
+ 
+ 	// set buffer size
+ 	buffer_size = (1U << chip_param->page_shift) + 1024;
+-- 
+1.9.0
+
