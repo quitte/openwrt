@@ -1,0 +1,51 @@
+From 4af005d1d4108a9e0442d2400571d7c713fc5d36 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Thu, 28 Aug 2014 03:23:10 +0200
+Subject: [PATCH 6/6] add mtd partitions to the default environment
+
+---
+ include/configs/sunxi-common.h | 28 ++++++++--------------------
+ 1 file changed, 8 insertions(+), 20 deletions(-)
+
+diff --git a/include/configs/sunxi-common.h b/include/configs/sunxi-common.h
+index 11e192b..396d273 100644
+--- a/include/configs/sunxi-common.h
++++ b/include/configs/sunxi-common.h
+@@ -34,26 +34,14 @@
+ #define CONFIG_SYS_NAND_U_BOOT_DST	0x44000000
+ #define CONFIG_SYS_NAND_U_BOOT_SIZE	0x100000
+ #define CONFIG_SYS_NAND_U_BOOT_START	0x00
+-
+-/*SPL configuration
+-
+-                CONFIG_SPL_NAND_BOOT
+-                Add support NAND boot
+-
+-                CONFIG_SYS_NAND_U_BOOT_OFFS
+-                Location in NAND to read U-Boot from
+-
+-                CONFIG_SYS_NAND_U_BOOT_DST
+-                Location in memory to load U-Boot to
+-
+-                CONFIG_SYS_NAND_U_BOOT_SIZE
+-                Size of image to load
+-
+-                CONFIG_SYS_NAND_U_BOOT_START
+-                Entry point in loaded image to jump to
+-
+-*/
+-
++#define MTDIDS_DEFAULT "nand0=mtd-nand-sunxi.0"
++#define MTDPARTS_DEFAULT "mtdparts=mtd-nand-sunxi.0:"       \
++        "2m(spl),"                                \
++        "2m(u-boot),"                                \
++        "2m(env),"                                \
++        "2m(dtb),"                                \
++        "8m(kernel),"                                    \
++        "-(rootfs)"
+ 
+ /*
+  * Display CPU information
+-- 
+1.9.0
+
