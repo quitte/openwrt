@@ -1,0 +1,31 @@
+From a63cd10cfc2c8c7374d4f19456223328195e3567 Mon Sep 17 00:00:00 2001
+From: Petros Angelatos <petrosagg@gmail.com>
+Date: Mon, 25 Aug 2014 23:54:57 +0200
+Subject: [PATCH 2/2] mtd: nand: add Samsung's K9GBG08U0B to nand_ids table
+
+Add the full description of the Samsung K9GBG08U0B NAND chip in the
+nand_ids table so that we can later use the NAND ECC infos and ONFI timings
+mode in controller drivers.
+
+Signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+---
+ drivers/mtd/nand/nand_ids.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/mtd/nand/nand_ids.c b/drivers/mtd/nand/nand_ids.c
+index 5e2f4ce..62dab14 100644
+--- a/drivers/mtd/nand/nand_ids.c
++++ b/drivers/mtd/nand/nand_ids.c
+@@ -50,6 +50,9 @@ struct nand_flash_dev nand_flash_ids[] = {
+ 		{ .id = {0xad, 0xde, 0x94, 0xda, 0x74, 0xc4} },
+ 		  SZ_8K, SZ_8K, SZ_2M, 0, 6, 640, NAND_ECC_INFO(40, SZ_1K),
+ 		  4 },
++	{"K9GBG08U0B 32G 3.3V 8-bit",
++		{ .id = {0xec, 0xd7, 0x94, 0x7e, 0x64, 0x44} },
++		  SZ_8K, SZ_4K, SZ_1M, 0, 6, 1024, NAND_ECC_INFO(40, SZ_1K) },
+ 
+ 	LEGACY_ID_NAND("NAND 4MiB 5V 8-bit",   0x6B, 4, SZ_8K, SP_OPTIONS),
+ 	LEGACY_ID_NAND("NAND 4MiB 3,3V 8-bit", 0xE3, 4, SZ_8K, SP_OPTIONS),
+-- 
+1.9.1
+
