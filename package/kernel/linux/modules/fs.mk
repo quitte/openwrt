@@ -317,8 +317,9 @@ define KernelPackage/fs-nfs-common-v4
 	CONFIG_SUNRPC_GSS\
 	CONFIG_NFS_V4=y\
 	CONFIG_NFSD_V4=y
-  DEPENDS:= @BROKEN
-  FILES+=$(LINUX_DIR)/net/sunrpc/auth_gss/auth_rpcgss.ko
+  DEPENDS:= +kmod-fs-nfs-common
+  FILES+=$(LINUX_DIR)/net/sunrpc/auth_gss/auth_rpcgss.ko \
+	$(LINUX_DIR)/lib/oid_registry.ko
   AUTOLOAD=$(call AutoLoad,30,auth_rpcgss)
 endef
 
@@ -326,13 +327,16 @@ define KernelPackage/fs-nfs-common-v4/description
  Kernel modules for NFS V4 & NFSD V4 kernel support
 endef
 
-$(eval $(call KernelPackage,fs-nfs-common-v4))
+$(eval $(call KernelPackage,fs-nfs-common-v4,+fs-nfs-common))
 
 
 define KernelPackage/fs-nfsd
   SUBMENU:=$(FS_MENU)
   TITLE:=NFS kernel server support
   DEPENDS:=+kmod-fs-nfs-common +kmod-fs-exportfs
+  ifdef CONFIG_PACKAGE_kmod-fs-nfs-common-v4
+    DEPENDS+= +kmod-fs-nfs-common-v4
+  endif
   KCONFIG:= \
 	CONFIG_NFSD \
 	CONFIG_NFSD_FAULT_INJECTION=n
