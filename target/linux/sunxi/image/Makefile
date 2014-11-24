@@ -90,6 +90,10 @@ define Image/Build/Profile/Cubieboard2
 	$(call Image/Build/SDCard,$(1),sun7i-a20-cubieboard2)
 endef
 
+define Image/Build/Profile/truck
+	$(call Image/Build/SDCard,$(1),sun7i-a20-cubietruck)
+endef
+
 define Image/Build/Profile/OLIMEX-A13-SOM
 	$(call Image/Build/SDCard,$(1),sun5i-a13-olinuxino)
 endef
