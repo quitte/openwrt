@@ -1,0 +1,65 @@
+From 64d90a890a4183c4887e5d4b5622d2ab9b49c49d Mon Sep 17 00:00:00 2001
+From: yassin <yassinjaffer@gmail.com>
+Date: Tue, 16 Sep 2014 21:30:34 +1000
+Subject: [PATCH 05/18] mtd: nand: support ONFI timing mode retrieval for
+ non-ONFI
+
+---
+ drivers/mtd/nand/nand_base.c | 1 +
+ include/linux/mtd/nand.h     | 7 +++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/drivers/mtd/nand/nand_base.c b/drivers/mtd/nand/nand_base.c
+index 45a7fcf..0eaca4d 100644
+--- a/drivers/mtd/nand/nand_base.c
++++ b/drivers/mtd/nand/nand_base.c
+@@ -3773,6 +3773,7 @@ static bool find_full_id_nand(struct mtd_info *mtd, struct nand_chip *chip,
+ 		chip->options |= type->options;
+ 		chip->ecc_strength_ds = NAND_ECC_STRENGTH(type);
+ 		chip->ecc_step_ds = NAND_ECC_STEP(type);
++		chip->onfi_timing_mode_ds = type->onfi_timing_mode_ds;
+ 
+ 		*busw = type->options & NAND_BUSWIDTH_16;
+ 
+diff --git a/include/linux/mtd/nand.h b/include/linux/mtd/nand.h
+index a295577..9f27a7c 100644
+--- a/include/linux/mtd/nand.h
++++ b/include/linux/mtd/nand.h
+@@ -634,6 +634,7 @@ struct nand_buffers {
+  * @ecc_step_ds:	[INTERN] ECC step required by the @ecc_strength_ds,
+  *                      also from the datasheet. It is the recommended ECC step
+  *			size, if known; if unknown, set to zero.
++ * @onfi_timing_mode_ds:[INTERN] ONFI timing mode deduced from datasheet.
+  * @numchips:		[INTERN] number of physical chips
+  * @chipsize:		[INTERN] the size of one chip for multichip arrays
+  * @pagemask:		[INTERN] page number mask = number of (pages / chip) - 1
+@@ -726,6 +727,7 @@ struct nand_chip {
+ 	uint8_t bits_per_cell;
+ 	uint16_t ecc_strength_ds;
+ 	uint16_t ecc_step_ds;
++	int onfi_timing_mode_ds;
+ 	int badblockpos;
+ 	int badblockbits;
+ 
+@@ -830,6 +832,10 @@ struct nand_chip {
+  *               @ecc_step_ds in nand_chip{}, also from the datasheet.
+  *               For example, the "4bit ECC for each 512Byte" can be set with
+  *               NAND_ECC_INFO(4, 512).
++ * @onfi_timing_mode_ds: the ONFI timing mode supported by this NAND chip. This
++ *                       should be deduced from timings described in the
++ *                       datasheet.
++ *
+  */
+ struct nand_flash_dev {
+ 	char *name;
+@@ -850,6 +856,7 @@ struct nand_flash_dev {
+ 		uint16_t strength_ds;
+ 		uint16_t step_ds;
+ 	} ecc;
++	int onfi_timing_mode_ds;
+ };
+ 
+ /**
+-- 
+2.1.3
+

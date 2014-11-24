@@ -1,0 +1,32 @@
+From 78f9487b2b0195bfcb3b57c350fee66adacca4b0 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Mon, 24 Nov 2014 05:33:28 +0100
+Subject: [PATCH 18/18] DTS add option to specify path to external DTBs
+
+---
+ dts/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dts/Makefile b/dts/Makefile
+index d3122aa..c88d332 100644
+--- a/dts/Makefile
++++ b/dts/Makefile
+@@ -12,11 +12,15 @@ ifeq ($(DEVICE_TREE),)
+ DEVICE_TREE := unset
+ endif
+ 
++ifneq ($(EXT_DTB_PATH),)
++DTB := $(EXT_DTB_PATH)/$(CONFIG_FDTFILE)
++else
+ ifneq ($(EXT_DTB),)
+ DTB := $(EXT_DTB)
+ else
+ DTB := arch/$(ARCH)/dts/$(DEVICE_TREE).dtb
+ endif
++endif
+ 
+ $(obj)/dt.dtb: $(DTB) FORCE
+ 	$(call if_changed,shipped)
+-- 
+2.1.3
+

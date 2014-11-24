@@ -1,0 +1,36 @@
+From 7fedb579601d02b5487e9b0b285ad2d272577661 Mon Sep 17 00:00:00 2001
+From: yassin <yassinjaffer@gmail.com>
+Date: Mon, 6 Oct 2014 16:44:48 +1100
+Subject: [PATCH 13/18] sunxi: add nand command and fdt support
+
+---
+ include/configs/sunxi-common.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/include/configs/sunxi-common.h b/include/configs/sunxi-common.h
+index 1d947d7..f93fe0c 100644
+--- a/include/configs/sunxi-common.h
++++ b/include/configs/sunxi-common.h
+@@ -252,4 +252,19 @@
+ #define CONFIG_EXTRA_ENV_SETTINGS
+ #endif
+ 
++#ifdef  CONFIG_NAND
++/* FDT support */
++#define CONFIG_OF_CONTROL	/* Use the device tree to set up U-Boot */
++#define CONFIG_OF_SEPARATE
++
++/* NAND config */
++#define CONFIG_CMD_NAND
++#define CONFIG_SUNXI_NAND	
++#define CONFIG_SYS_NAND_SELF_INIT
++#define CONFIG_SYS_MAX_NAND_DEVICE      	1
++#define CONFIG_SYS_NAND_ONFI_DETECTION
++#undef CONFIG_CMD_PART
++
++#endif
++
+ #endif /* _SUNXI_COMMON_CONFIG_H */
+-- 
+2.1.3
+

@@ -1,0 +1,27 @@
+From 0b35dc2b363d2267fad7010c946129f51689404f Mon Sep 17 00:00:00 2001
+From: yassin <yassinjaffer@gmail.com>
+Date: Tue, 16 Sep 2014 21:35:22 +1000
+Subject: [PATCH 07/18] mtd: nand: add Samsung's K9GBG08U0A to nand_ids table
+
+---
+ drivers/mtd/nand/nand_ids.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/mtd/nand/nand_ids.c b/drivers/mtd/nand/nand_ids.c
+index 11d6cb6..97c438b 100644
+--- a/drivers/mtd/nand/nand_ids.c
++++ b/drivers/mtd/nand/nand_ids.c
+@@ -65,6 +65,10 @@ struct nand_flash_dev nand_flash_ids[] = {
+ 		{ .id = {0xad, 0xde, 0x94, 0xda, 0x74, 0xc4} },
+ 		  SZ_8K, SZ_8K, SZ_2M, 0, 6, 640, NAND_ECC_INFO(40, SZ_1K),
+ 		  4 },
++	{"K9GBG08U0A 32G 3.3V 8-bit",
++		{ .id = {0xec, 0xd7, 0x94, 0x7a, 0x54, 0x43} },
++		  SZ_8K, SZ_4K, SZ_1M, 0, 6, 640, NAND_ECC_INFO(40, SZ_1K),
++		  0 },
+ 
+ 	LEGACY_ID_NAND("NAND 4MiB 5V 8-bit",   0x6B, 4, SZ_8K, SP_OPTIONS),
+ 	LEGACY_ID_NAND("NAND 4MiB 3,3V 8-bit", 0xE3, 4, SZ_8K, SP_OPTIONS),
+-- 
+2.1.3
+

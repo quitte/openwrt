@@ -1,0 +1,23 @@
+From 064c6408c9efafd647cc857b6e5ecc8ac32026e5 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Mon, 24 Nov 2014 01:52:15 +0100
+Subject: [PATCH 15/18] Cubietruck: enable NAND in defconfig
+
+---
+ configs/Cubietruck_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/Cubietruck_defconfig b/configs/Cubietruck_defconfig
+index 1389f21..897ccb3 100644
+--- a/configs/Cubietruck_defconfig
++++ b/configs/Cubietruck_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SPL=y
+-CONFIG_SYS_EXTRA_OPTIONS="CUBIETRUCK,AXP209_POWER,SUNXI_GMAC,RGMII,AHCI,SATAPWR=SUNXI_GPH(12),USB_EHCI"
++CONFIG_SYS_EXTRA_OPTIONS="CUBIETRUCK,AXP209_POWER,SUNXI_GMAC,RGMII,AHCI,SATAPWR=SUNXI_GPH(12),USB_EHCI,NAND"
+ CONFIG_FDTFILE="sun7i-a20-cubietruck.dtb"
+ +S:CONFIG_ARM=y
+ +S:CONFIG_TARGET_SUN7I=y
+-- 
+2.1.3
+

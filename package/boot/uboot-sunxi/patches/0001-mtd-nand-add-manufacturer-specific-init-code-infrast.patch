@@ -1,0 +1,54 @@
+From 50048dd7585e4053ff71a61830c59fb2d90ae4f4 Mon Sep 17 00:00:00 2001
+From: yassin <yassinjaffer@gmail.com>
+Date: Tue, 16 Sep 2014 21:17:01 +1000
+Subject: [PATCH 01/18] mtd: nand: add manufacturer specific init code
+ infrastructure
+
+---
+ drivers/mtd/nand/nand_base.c | 7 +++++++
+ include/linux/mtd/nand.h     | 4 ++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/drivers/mtd/nand/nand_base.c b/drivers/mtd/nand/nand_base.c
+index 0b6e7ee..45a7fcf 100644
+--- a/drivers/mtd/nand/nand_base.c
++++ b/drivers/mtd/nand/nand_base.c
+@@ -3929,6 +3929,13 @@ ident_done:
+ 	if (mtd->writesize > 512 && chip->cmdfunc == nand_command)
+ 		chip->cmdfunc = nand_command_lp;
+ 
++	if (nand_manuf_ids[maf_idx].init) {
++		int err;
++		err = nand_manuf_ids[maf_idx].init(mtd, id_data);
++		if (err)
++			return ERR_PTR(err);
++	}
++
+ 	pr_info("device found, Manufacturer ID: 0x%02x, Chip ID: 0x%02x\n",
+ 		*maf_id, *dev_id);
+ 
+diff --git a/include/linux/mtd/nand.h b/include/linux/mtd/nand.h
+index 8438490..be7cbea 100644
+--- a/include/linux/mtd/nand.h
++++ b/include/linux/mtd/nand.h
+@@ -705,6 +705,9 @@ struct nand_chip {
+ 	int (*onfi_get_features)(struct mtd_info *mtd, struct nand_chip *chip,
+ 			int feature_addr, uint8_t *subfeature_para);
+ 	int (*setup_read_retry)(struct mtd_info *mtd, int retry_mode);
++	void (*manuf_cleanup)(struct mtd_info *mtd);
++
++	void *manuf_priv;
+ 
+ 	int chip_delay;
+ 	unsigned int options;
+@@ -857,6 +860,7 @@ struct nand_flash_dev {
+ struct nand_manufacturers {
+ 	int id;
+ 	char *name;
++	int (*init)(struct mtd_info *mtd, const uint8_t *id);
+ };
+ 
+ extern struct nand_flash_dev nand_flash_ids[];
+-- 
+2.1.3
+

@@ -1,0 +1,32 @@
+From c5296d7abfbd24639162efc82c224bc9287c15d7 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Sun, 23 Nov 2014 18:16:50 +0100
+Subject: [PATCH 14/18] remove function that is defined elsewhere
+
+---
+ drivers/mtd/nand/sunxi_nand.c | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/drivers/mtd/nand/sunxi_nand.c b/drivers/mtd/nand/sunxi_nand.c
+index 04bccfb..7681538 100644
+--- a/drivers/mtd/nand/sunxi_nand.c
++++ b/drivers/mtd/nand/sunxi_nand.c
+@@ -1783,15 +1783,6 @@ static void sunxi_nand_part_release(struct nand_part *part)
+ 	kfree(to_sunxi_nand_part(part));
+ }
+ 
+-/* Helper to read a big number; size is in cells (not bytes) */
+-static inline u64 of_read_number(const fdt32_t *cell, int size)
+-{
+-	u64 r = 0;
+-	while (size--)
+-		r = (r << 32) | fdt32_to_cpu(*(cell++));
+-	return r;
+-}
+-
+ static int ofnandpart_parse(const void *blob, int node, struct mtd_info *master)
+ {
+ 	
+-- 
+2.1.3
+
