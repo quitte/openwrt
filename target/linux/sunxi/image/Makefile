@@ -49,7 +49,7 @@ define Image/Build/SDCard
 	rm -f $(KDIR)/boot.img
 	mkdosfs $(KDIR)/boot.img -C $(FAT32_BLOCKS)
 	
-	mcopy -i $(KDIR)/boot.img $(BIN_DIR)/uboot-sunxi-$(PROFILE)/openwrt-sunxi-$(PROFILE)-uEnv.txt ::uEnv.txt
+	mcopy -i $(KDIR)/boot.img $(BIN_DIR)/uboot-sunxi-$(PROFILE)/openwrt-sunxi-$(PROFILE)-boot.scr ::boot.scr
 	mcopy -i $(KDIR)/boot.img $(BIN_DIR)/$(2).dtb ::dtb
 	mcopy -i $(KDIR)/boot.img $(BIN_DIR)/$(IMG_PREFIX)-uImage ::uImage
 	

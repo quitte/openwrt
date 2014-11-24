@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2013-2014 OpenWrt.org
 #
@@ -8,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=u-boot
-PKG_VERSION:=2014.04
+PKG_VERSION:=2014.10
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:= \
 	http://mirror2.openwrt.org/sources \
@@ -116,7 +117,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) -C $(PKG_BUILD_DIR) EXT_DTB_PATH=$(BIN_DIR) \
 		CROSS_COMPILE=$(TARGET_CROSS)
 endef
 
@@ -128,8 +129,8 @@ define Package/uboot/install/default
 		$(BIN_DIR)/uboot-$(BOARD)-$(1)/openwrt-$(BOARD)-$(1)-spl.bin
 	$(CP) $(PKG_BUILD_DIR)/u-boot-sunxi-with-spl.bin \
 		$(BIN_DIR)/uboot-$(BOARD)-$(1)/openwrt-$(BOARD)-$(1)-u-boot-with-spl.bin
-	$(CP) uEnv.txt \
-		$(BIN_DIR)/uboot-$(BOARD)-$(1)/openwrt-$(BOARD)-$(1)-uEnv.txt
+	mkimage -C none -A arm -T script -d boot.scr \
+		$(BIN_DIR)/uboot-$(BOARD)-$(1)/openwrt-$(BOARD)-$(1)-boot.scr
 endef
 
 define Package/uboot/install/template

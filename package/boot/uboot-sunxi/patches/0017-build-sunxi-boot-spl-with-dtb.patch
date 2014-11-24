@@ -1,0 +1,25 @@
+From 671a79fcbcbe5926daed75b104f91b38f3f92040 Mon Sep 17 00:00:00 2001
+From: Jonas Meyer <quitte@gmail.com>
+Date: Mon, 24 Nov 2014 03:50:26 +0100
+Subject: [PATCH 17/18] build sunxi-boot-spl with dtb
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 99097e1..41b7a89 100644
+--- a/Makefile
++++ b/Makefile
+@@ -941,7 +941,7 @@ u-boot-nand.gph: u-boot.bin FORCE
+ ifneq ($(CONFIG_SUNXI),)
+ OBJCOPYFLAGS_u-boot-sunxi-with-spl.bin = -I binary -O binary \
+ 				   --pad-to=$(CONFIG_SPL_PAD_TO) --gap-fill=0xff
+-u-boot-sunxi-with-spl.bin: spl/sunxi-spl.bin u-boot.img FORCE
++u-boot-sunxi-with-spl.bin: spl/sunxi-spl.bin u-boot-dtb.img FORCE
+ 	$(call if_changed,pad_cat)
+ endif
+ 
+-- 
+2.1.3
+
