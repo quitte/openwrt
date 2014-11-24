@@ -1,0 +1,40 @@
+From 4271c739f40bd5c712458de934b247964f442257 Mon Sep 17 00:00:00 2001
+From: Boris BREZILLON <boris.brezillon@free-electrons.com>
+Date: Mon, 28 Jul 2014 14:03:18 +0200
+Subject: [PATCH 05/19] ARM: sunxi/dt: enable NAND on cubietruck board
+
+Enable the NFC and describe the NAND flash connected to this controller.
+
+Signed-off-by: Boris BREZILLON <boris.brezillon@free-electrons.com>
+---
+ arch/arm/boot/dts/sun7i-a20-cubietruck.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun7i-a20-cubietruck.dts b/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
+index a6c1a3c..887f5ee 100644
+--- a/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
++++ b/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
+@@ -20,6 +20,20 @@
+ 	compatible = "cubietech,cubietruck", "allwinner,sun7i-a20";
+ 
+ 	soc@01c00000 {
++		nfc: nand@01c03000 {
++			pinctrl-names = "default";
++			pinctrl-0 = <&nand_pins_a &nand_cs0_pins_a &nand_rb0_pins_a>;
++			status = "okay";
++
++			nand@0 {
++				#address-cells = <2>;
++				#size-cells = <2>;
++				reg = <0>;
++				allwinner,rb = <0>;
++				nand-ecc-mode = "hw";
++			};
++		};
++
+ 		mmc0: mmc@01c0f000 {
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&mmc0_pins_a>, <&mmc0_cd_pin_reference_design>;
+-- 
+2.1.3
+
